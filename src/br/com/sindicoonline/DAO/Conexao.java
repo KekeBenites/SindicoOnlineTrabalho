@@ -27,8 +27,8 @@ public final class Conexao {
         try {
             conn = DriverManager.getConnection(
                     "jdbc:mysql://127.0.0.1:3309/sindico_online_db",
-                    "root",
-                    "laekle050404"
+                    "usuario",
+                    "123456"
                     );
             System.out.println("Conectado com sucesso.");
         } catch (SQLException ex) {
