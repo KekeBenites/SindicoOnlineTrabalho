@@ -5,6 +5,10 @@
  */
 package br.com.sindicoonline.frm;
 
+import br.com.sindicoonline.DAO.Aviso;
+import br.com.sindicoonline.DAO.AvisoDAO;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author klebe
@@ -14,8 +18,12 @@ public class frmAvisos extends javax.swing.JInternalFrame {
     /**
      * Creates new form frmAvisos
      */
-    public frmAvisos(String usuario, String idMorador) {
+   
+    public frmAvisos() {
         initComponents();
+        lerTabela();
+        
+                
     }
 
     /**
@@ -29,29 +37,83 @@ public class frmAvisos extends javax.swing.JInternalFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtArea = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtAvisos = new javax.swing.JTable();
 
         setClosable(true);
         setTitle("Quadro de Avisos");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setText("jLabel1");
+        jLabel1.setText("Nome:");
+
+        jLabel2.setText("Sindico");
+
+        jScrollPane1.setEnabled(false);
+
+        txtArea.setColumns(20);
+        txtArea.setFont(new java.awt.Font("Monospaced", 0, 36)); // NOI18N
+        txtArea.setForeground(new java.awt.Color(255, 0, 0));
+        txtArea.setRows(5);
+        txtArea.setEnabled(false);
+        jScrollPane1.setViewportView(txtArea);
+
+        jtAvisos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Codigo", "Aviso"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtAvisos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtAvisosMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jtAvisos);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(314, 314, 314)
-                .addComponent(jLabel1)
-                .addContainerGap(350, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(87, 87, 87)
-                .addComponent(jLabel1)
-                .addContainerGap(311, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -68,9 +130,34 @@ public class frmAvisos extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jtAvisosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtAvisosMouseClicked
+        
+        txtArea.setText(jtAvisos.getValueAt(jtAvisos.getSelectedRow(), 1).toString());        // TODO add your handling code here:
+    }//GEN-LAST:event_jtAvisosMouseClicked
+
+    public void lerTabela() {
+//Arrumar!!!!!
+        DefaultTableModel modelo = (DefaultTableModel) jtAvisos.getModel();
+        modelo.setNumRows(0);
+        Aviso aviso = new Aviso();
+        AvisoDAO daoAviso = new AvisoDAO();
+
+        for (Aviso a : daoAviso.readAvisoFiltro(aviso)) {
+            modelo.addRow(new Object[]{
+                a.getIdAviso(),
+                a.getDescricaoAviso()});
+            txtArea.setText(a.getDescricaoAviso());
+        }
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jtAvisos;
+    private javax.swing.JTextArea txtArea;
     // End of variables declaration//GEN-END:variables
 }

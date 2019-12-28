@@ -1,5 +1,7 @@
 package br.com.sindicoonline.frm;
 
+import br.com.sindicoonline.DAO.BoletoDAO;
+import br.com.sindicoonline.Utilits.Utilidades;
 import javax.swing.UIManager;
 
 public class TrabalhoFaculdade {
@@ -162,12 +164,16 @@ public class TrabalhoFaculdade {
 //
 //
 //
-//        frmPrincipal prin =new frmPrincipal();
+//        frmPrincipal prin = new frmPrincipal();
 //        prin.setVisible(true);
-
+//
 frmLogin login = new frmLogin();
 login.setVisible(true);
-
+//        
+//        
+//
+//    Utilidades util = new Utilidades();
+//        System.out.println(util.achaCodigoPredioParaAviso("2"));
     }
     
 }

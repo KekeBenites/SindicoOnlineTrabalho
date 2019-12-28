@@ -14,6 +14,9 @@ import br.com.sindicoonline.DAO.MoradorDAO;
 import br.com.sindicoonline.DAO.Predio;
 import br.com.sindicoonline.DAO.PredioDAO;
 import br.com.sindicoonline.Utilits.Utilidades;
+import br.com.sindicoonline.Utilits.ValidarCPF;
+import static br.com.sindicoonline.Utilits.ValidarCPF.isCPF;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -71,7 +74,6 @@ public class frmMorador extends javax.swing.JInternalFrame {
         jPanel3 = new javax.swing.JPanel();
         btnEditar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
-        btnSair = new javax.swing.JButton();
         txtNomeMorador = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -90,21 +92,33 @@ public class frmMorador extends javax.swing.JInternalFrame {
         txtUsuario = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtSenha = new javax.swing.JPasswordField();
+        btnCancelar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtMorador = new javax.swing.JTable();
 
         setClosable(true);
         setTitle("Cadastro Morador");
 
-        btnEditar.setText("Editar Cadastro");
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/edit4545.png"))); // NOI18N
+        btnEditar.setToolTipText("Editar Cadastro");
         btnEditar.setEnabled(false);
+        btnEditar.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                btnEditarAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarActionPerformed(evt);
             }
         });
 
-        btnExcluir.setText("Excluir Cadastro");
+        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/delete4545.png"))); // NOI18N
+        btnExcluir.setToolTipText("Excluir Cadastro");
         btnExcluir.setEnabled(false);
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,29 +126,31 @@ public class frmMorador extends javax.swing.JInternalFrame {
             }
         });
 
-        btnSair.setText("Sair");
-        btnSair.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSairActionPerformed(evt);
+        txtNomeMorador.setToolTipText("Digite o nome do morador.");
+        txtNomeMorador.setEnabled(false);
+        txtNomeMorador.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNomeMoradorKeyPressed(evt);
             }
         });
-
-        txtNomeMorador.setEnabled(false);
 
         jLabel1.setText("Nome:");
 
         jLabel4.setText("Codigo:");
 
-        btnNovo.setText("Novo Cadastro");
+        btnNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/add4545.png"))); // NOI18N
+        btnNovo.setToolTipText("Novo Cadastro");
         btnNovo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNovoActionPerformed(evt);
             }
         });
 
+        txtIdMorador.setToolTipText("Codigo referente ao cadastro.");
         txtIdMorador.setEnabled(false);
 
-        btnSalvar.setText("Salvar");
+        btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/salvar4545.png"))); // NOI18N
+        btnSalvar.setToolTipText("Salvar cadastro.");
         btnSalvar.setEnabled(false);
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -142,6 +158,7 @@ public class frmMorador extends javax.swing.JInternalFrame {
             }
         });
 
+        comboPredio.setToolTipText("Selecione o predio correspondente.");
         comboPredio.setEnabled(false);
         comboPredio.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
@@ -162,7 +179,13 @@ public class frmMorador extends javax.swing.JInternalFrame {
                 comboPredioActionPerformed(evt);
             }
         });
+        comboPredio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                comboPredioKeyPressed(evt);
+            }
+        });
 
+        comboBloco.setToolTipText("Selecione o bloco correspondente.");
         comboBloco.setEnabled(false);
         comboBloco.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -174,11 +197,22 @@ public class frmMorador extends javax.swing.JInternalFrame {
                 comboBlocoActionPerformed(evt);
             }
         });
+        comboBloco.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                comboBlocoKeyPressed(evt);
+            }
+        });
 
+        comboApto.setToolTipText("Selecione o apartamento correspondente.");
         comboApto.setEnabled(false);
         comboApto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboAptoActionPerformed(evt);
+            }
+        });
+        comboApto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                comboAptoKeyPressed(evt);
             }
         });
 
@@ -191,19 +225,46 @@ public class frmMorador extends javax.swing.JInternalFrame {
         jLabel6.setText("CPF:");
 
         try {
-            txtCPF.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.##-##")));
+            txtCPF.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        txtCPF.setToolTipText("Digite um CPF válido.");
         txtCPF.setEnabled(false);
+        txtCPF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCPFKeyPressed(evt);
+            }
+        });
 
         jLabel7.setText("Usuario:");
 
+        txtUsuario.setToolTipText("Usar apenas letras minusculas.");
         txtUsuario.setEnabled(false);
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtUsuarioKeyPressed(evt);
+            }
+        });
 
         jLabel8.setText("Senha:");
 
+        txtSenha.setToolTipText("Utilizar senha forte.");
         txtSenha.setEnabled(false);
+        txtSenha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSenhaKeyPressed(evt);
+            }
+        });
+
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/cancelar Original.png"))); // NOI18N
+        btnCancelar.setToolTipText("Canelar ação.");
+        btnCancelar.setEnabled(false);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -219,20 +280,6 @@ public class frmMorador extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(btnNovo)
-                                .addGap(32, 32, 32)
-                                .addComponent(btnEditar)
-                                .addGap(35, 35, 35)
-                                .addComponent(btnExcluir)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(28, 28, 28)
-                                        .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 55, Short.MAX_VALUE))))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
                                         .addComponent(txtIdMorador, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -247,11 +294,20 @@ public class frmMorador extends javax.swing.JInternalFrame {
                                         .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(jLabel8)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtNomeMorador, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)))
-                        .addGap(77, 77, 77))
+                                    .addComponent(txtNomeMorador, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(btnNovo)
+                                .addGap(35, 35, 35)
+                                .addComponent(btnEditar)
+                                .addGap(35, 35, 35)
+                                .addComponent(btnExcluir)
+                                .addGap(35, 35, 35)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnSalvar)
+                                    .addComponent(btnCancelar))))
+                        .addContainerGap(218, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -270,18 +326,25 @@ public class frmMorador extends javax.swing.JInternalFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNovo)
-                    .addComponent(btnEditar)
-                    .addComponent(btnExcluir)
-                    .addComponent(btnSair))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtIdMorador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtNomeMorador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnNovo)
+                        .addComponent(btnEditar)
+                        .addComponent(btnExcluir))
+                    .addComponent(btnCancelar))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtIdMorador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(txtNomeMorador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalvar)
+                        .addGap(18, 18, 18)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -296,16 +359,15 @@ public class frmMorador extends javax.swing.JInternalFrame {
                     .addComponent(jLabel3)
                     .addComponent(comboBloco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(comboApto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalvar))
-                .addContainerGap(34, Short.MAX_VALUE))
+                    .addComponent(comboApto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 746, Short.MAX_VALUE)
+            .addGap(0, 680, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addContainerGap()
@@ -314,7 +376,7 @@ public class frmMorador extends javax.swing.JInternalFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 225, Short.MAX_VALUE)
+            .addGap(0, 234, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(6, 6, 6)
@@ -355,7 +417,7 @@ public class frmMorador extends javax.swing.JInternalFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -372,6 +434,9 @@ public class frmMorador extends javax.swing.JInternalFrame {
         if (txtIdMorador.equals(null)) {
             JOptionPane.showMessageDialog(null, "Selecionar algum morador.");
         } else {
+limpaEPopulaBloco();
+
+
             opSAlvarEditar = "editar";
             comboApto.setEditable(false);
             btnSalvar.setEnabled(true);
@@ -386,7 +451,9 @@ public class frmMorador extends javax.swing.JInternalFrame {
             comboPredio.setEnabled(true);
             comboBloco.setEnabled(true);
             comboApto.setEnabled(true);
+            btnCancelar.setEnabled(true);
         }
+
 
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -420,12 +487,9 @@ public class frmMorador extends javax.swing.JInternalFrame {
             }
 
         }
+        btnCancelar.setEnabled(false);
 
     }//GEN-LAST:event_btnExcluirActionPerformed
-
-    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
-        this.dispose();        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSairActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
         // TODO add your handling code here:
@@ -452,6 +516,7 @@ public class frmMorador extends javax.swing.JInternalFrame {
         txtUsuario.setText(null);
         txtSenha.setText(null);
         opSAlvarEditar = "novo";
+        btnCancelar.setEnabled(true);
 
 
     }//GEN-LAST:event_btnNovoActionPerformed
@@ -464,51 +529,65 @@ public class frmMorador extends javax.swing.JInternalFrame {
         Utilidades util = new Utilidades();
 
         int codPredio = util.achaCodigoPredio((String) comboPredio.getSelectedItem());
+        System.out.println("Cod Predio " + codPredio);
         int codBloco = util.achaCodigoBloco((String) comboBloco.getSelectedItem(), codPredio);
-        int codApto = util.achaCodigoApto((int) comboApto.getSelectedItem(), codBloco);
+        System.out.println("Cod Bloco " + codBloco);
+   
+        Integer codApto = util.achaCodigoApto((Integer) comboApto.getSelectedItem(), codBloco);
+        System.out.println("codApto " + codApto);
 
         morador.setNomeMorador(txtNomeMorador.getText());
-        morador.setCpfMorador(txtCPF.getText());
+        morador.setCpfMorador(txtCPF.getText().replaceAll("[.-]", ""));
         morador.setLoginMorador(txtUsuario.getText());
         morador.setSenhaMorador(txtSenha.getText());
+
         ap.setIdApto(codApto);
+
         morador.setApto(ap);
 
-        if (opSAlvarEditar.equals("novo")) {
+        if (isCPF(txtCPF.getText().replaceAll("[.-]", ""))) {
+            if (opSAlvarEditar.equals("novo")) {
+                daoMorador.adicionarMorador(morador);
+                JOptionPane.showMessageDialog(null, "Morador ADICIONADO com sucesso!");
 
-            daoMorador.adicionarMorador(morador);
-            JOptionPane.showMessageDialog(null, "Morador ADICIONADO com sucesso!");
+                txtNomeMorador.setText("");
+                txtIdMorador.setText("");
+                txtCPF.setText("");
+                txtSenha.setText("");
+                txtUsuario.setText("");
+                txtCPF.setEnabled(false);
+                txtIdMorador.setEnabled(false);
+                txtNomeMorador.setEnabled(false);
+                txtSenha.setEnabled(false);
+                txtUsuario.setEnabled(false);
+                comboApto.setEnabled(false);
+                comboBloco.setEnabled(false);
+                comboPredio.setEnabled(false);
+                btnNovo.setEnabled(true);
+                btnCancelar.setEnabled(false);
+                btnSalvar.setEnabled(false);
 
-            txtNomeMorador.setText("");
-            txtIdMorador.setText("");
-            txtCPF.setText("");
-            txtSenha.setText("");
-            txtUsuario.setText("");
-            txtCPF.setEnabled(false);
-            txtIdMorador.setEnabled(false);
-            txtNomeMorador.setEnabled(false);
-            txtSenha.setEnabled(false);
-            txtUsuario.setEnabled(false);
-            comboApto.setEnabled(false);
-            comboBloco.setEnabled(false);
-            comboPredio.setEnabled(false);
-            btnNovo.setEnabled(true);
+            } else {
+                morador.setIdMorador(Integer.valueOf(txtIdMorador.getText()));
+                daoMorador.updateApto(morador);
+                JOptionPane.showMessageDialog(null, "Morador EDITADO com sucesso!");
+                btnNovo.setEnabled(true);
+                btnSalvar.setEnabled(false);
+                btnCancelar.setEnabled(false);
+                txtCPF.setEnabled(false);
+                txtIdMorador.setEnabled(false);
+                txtNomeMorador.setEnabled(false);
+                txtSenha.setEnabled(false);
+                txtUsuario.setEnabled(false);
+                comboApto.setEnabled(false);
+                comboBloco.setEnabled(false);
+                comboPredio.setEnabled(false);
 
+            }
         } else {
-            morador.setIdMorador(Integer.valueOf(txtIdMorador.getText()));
-            daoMorador.updateApto(morador);
-            JOptionPane.showMessageDialog(null, "Morador EDITADO com sucesso!");
-            txtCPF.setEnabled(false);
-            txtIdMorador.setEnabled(false);
-            txtNomeMorador.setEnabled(false);
-            txtSenha.setEnabled(false);
-            txtUsuario.setEnabled(false);
-            comboApto.setEnabled(false);
-            comboBloco.setEnabled(false);
-            comboPredio.setEnabled(false);
-
+            JOptionPane.showMessageDialog(null, "Digite um CPF valido.");
         }
-        opSAlvarEditar = "editar";
+
         lerTabela();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
@@ -533,13 +612,15 @@ public class frmMorador extends javax.swing.JInternalFrame {
         txtIdMorador.setText(jtMorador.getValueAt(jtMorador.getSelectedRow(), 0).toString());
         txtNomeMorador.setText(jtMorador.getValueAt(jtMorador.getSelectedRow(), 1).toString());
         txtCPF.setText(jtMorador.getValueAt(jtMorador.getSelectedRow(), 2).toString());
+        comboPredio.removeAllItems();
         populaComboPredio();
         comboPredio.setSelectedItem(jtMorador.getValueAt(jtMorador.getSelectedRow(), 5).toString());
         limpaEPopulaBloco();
         comboBloco.setSelectedItem(jtMorador.getValueAt(jtMorador.getSelectedRow(), 4).toString());
         comboApto.setEditable(true);
+
         populaComboSemFiltro();
-        
+
         comboApto.setSelectedItem(jtMorador.getValueAt(jtMorador.getSelectedRow(), 3).toString());
 
 //        String ap = jtMorador.getValueAt(jtMorador.getSelectedRow(), 3).toString();
@@ -574,6 +655,78 @@ public class frmMorador extends javax.swing.JInternalFrame {
 //            populaComboSemFiltro();
 //        }      
     }//GEN-LAST:event_comboAptoActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        int resposta = JOptionPane.showConfirmDialog(null, "Deseja realmente cancelar?", title, JOptionPane.YES_NO_OPTION);
+        if (resposta == JOptionPane.YES_OPTION) {
+
+            txtIdMorador.setEnabled(false);
+            txtNomeMorador.setEnabled(false);
+            txtCPF.setEnabled(false);
+            txtSenha.setEnabled(false);
+            txtUsuario.setEnabled(false);
+            txtIdMorador.setText("");
+            txtNomeMorador.setText("");
+            txtIdMorador.setText("");
+            txtCPF.setText("");
+            txtSenha.setText("");
+            txtUsuario.setText("");
+            btnNovo.setEnabled(true);
+            btnCancelar.setEnabled(false);
+            btnEditar.setEnabled(false);
+            btnExcluir.setEnabled(false);
+            btnSalvar.setEnabled(false);
+            comboApto.setEnabled(false);
+            comboBloco.setEnabled(false);
+            comboPredio.setEnabled(false);
+        }
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnEditarAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_btnEditarAncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditarAncestorAdded
+
+    private void txtNomeMoradorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeMoradorKeyPressed
+               if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            txtCPF.requestFocus();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNomeMoradorKeyPressed
+
+    private void txtCPFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCPFKeyPressed
+               if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            txtUsuario.requestFocus();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCPFKeyPressed
+
+    private void txtUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyPressed
+               if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            txtSenha.requestFocus();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUsuarioKeyPressed
+
+    private void txtSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSenhaKeyPressed
+               if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            comboPredio.requestFocus();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSenhaKeyPressed
+
+    private void comboPredioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comboPredioKeyPressed
+               if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            comboBloco.requestFocus();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_comboPredioKeyPressed
+
+    private void comboBlocoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comboBlocoKeyPressed
+               if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            comboApto.requestFocus();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBlocoKeyPressed
+
+    private void comboAptoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comboAptoKeyPressed
+               if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btnSalvar.requestFocus();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_comboAptoKeyPressed
 
     public void limpaEPopulaBloco() {
         try {
@@ -665,7 +818,7 @@ public class frmMorador extends javax.swing.JInternalFrame {
         Connection con = Conexao.getConnection();
         ResultSet rs = null;
         try {
-            stmt = con.prepareStatement("SELECT numeroApto FROM apto where idBloco = '" + bloco + "' and not exists (select idApto from morador where idApto = apto.idApto)");
+            stmt = con.prepareStatement("SELECT numeroApto FROM apto where idBloco = '" + bloco + "' and not exists (select idApto from morador where morador.idApto = apto.idApto)");
             rs = stmt.executeQuery();
             while (rs.next()) {
 //                Esse funciona q é um abeleza.
@@ -739,10 +892,10 @@ public class frmMorador extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
-    private javax.swing.JButton btnSair;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<Object> comboApto;
     private javax.swing.JComboBox<Object> comboBloco;

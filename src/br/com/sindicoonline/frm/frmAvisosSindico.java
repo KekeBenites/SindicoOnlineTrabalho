@@ -5,10 +5,22 @@
  */
 package br.com.sindicoonline.frm;
 
+import br.com.sindicoonline.DAO.Apto;
+import br.com.sindicoonline.DAO.AptoDAO;
+import br.com.sindicoonline.DAO.Aviso;
+import br.com.sindicoonline.DAO.AvisoDAO;
+import br.com.sindicoonline.DAO.Bloco;
 import br.com.sindicoonline.DAO.Conexao;
+import br.com.sindicoonline.DAO.Predio;
+import br.com.sindicoonline.Utilits.Utilidades;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,12 +28,13 @@ import java.sql.ResultSet;
  */
 public class frmAvisosSindico extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form frmAvisos
-     */
+    String opSalvar = "salvar";
+
     public frmAvisosSindico() {
+
         initComponents();
         populaCombo();
+        lerTabela();
     }
 
     /**
@@ -39,11 +52,14 @@ public class frmAvisosSindico extends javax.swing.JInternalFrame {
         btnExcluir = new javax.swing.JButton();
         btnSair = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        comboPredio = new javax.swing.JComboBox<>();
+        comboPredio = new javax.swing.JComboBox<Object>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtAvisos = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtAvisos = new javax.swing.JTable();
+        btnEnviar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        txtId = new javax.swing.JTextField();
 
         setClosable(true);
         setTitle("Quadro de Avisos - Sindico");
@@ -83,14 +99,18 @@ public class frmAvisosSindico extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("Predio");
 
-        comboPredio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Geral" }));
         comboPredio.setEnabled(false);
+        comboPredio.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                comboPredioMouseClicked(evt);
+            }
+        });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtAvisos.setColumns(20);
+        txtAvisos.setRows(5);
+        jScrollPane1.setViewportView(txtAvisos);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtAvisos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -98,7 +118,7 @@ public class frmAvisosSindico extends javax.swing.JInternalFrame {
                 {null, null, null}
             },
             new String [] {
-                "Codigo do Aviso", "Predio", "Aviso"
+                "Codigo do Aviso", "Aviso", "Predio"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -109,7 +129,24 @@ public class frmAvisosSindico extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        jtAvisos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtAvisosMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jtAvisos);
+
+        btnEnviar.setText("Enviar");
+        btnEnviar.setEnabled(false);
+        btnEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Codigo:");
+
+        txtId.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -120,18 +157,27 @@ public class frmAvisosSindico extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnNovo)
-                        .addGap(7, 7, 7)
-                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comboPredio, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(27, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnNovo)
+                                .addGap(7, 7, 7)
+                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, Short.MAX_VALUE)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(comboPredio, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(103, 103, 103)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnSair, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                            .addComponent(btnEnviar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(22, Short.MAX_VALUE))
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel1Layout.setVerticalGroup(
@@ -143,12 +189,16 @@ public class frmAvisosSindico extends javax.swing.JInternalFrame {
                     .addComponent(btnEditar)
                     .addComponent(btnExcluir)
                     .addComponent(btnSair))
-                .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(comboPredio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnEnviar)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(comboPredio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel2)
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(13, 13, 13)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -168,20 +218,53 @@ public class frmAvisosSindico extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        // TODO add your handling code here:
+        comboPredio.setEnabled(true);
+        txtAvisos.setEnabled(true);
+        btnEnviar.setEnabled(true);
+        btnNovo.setEnabled(false);
+        opSalvar = "salvar";
 
-       
+
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-     
+
+        opSalvar = "editar";
+
+        comboPredio.setEnabled(true);
+        txtAvisos.setEnabled(true);
+        btnEnviar.setEnabled(true);
+        btnNovo.setEnabled(false);
+        btnEditar.setEnabled(false);
+        btnExcluir.setEnabled(false);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
 
-    
+        Aviso aviso = new Aviso();
+        AvisoDAO daoAviso = new AvisoDAO();
+        
+        
+        try{
+            aviso.setIdAviso(Integer.valueOf(txtId.getText()));
+            daoAviso.deleteAviso(aviso);
+            
+            JOptionPane.showMessageDialog(null, "Aviso excluido com sucesso.");
+            txtAvisos.setText("");
+            txtId.setText("");
+            btnEditar.setEnabled(false);
+            btnEnviar.setEnabled(false);
+            btnExcluir.setEnabled(false);
+            btnNovo.requestFocus();
+            
+        }catch(Exception e){
+             JOptionPane.showMessageDialog(null, "Erro ao excluir.");
+        }
+        
+        lerTabela();
+
     }//GEN-LAST:event_btnExcluirActionPerformed
-public void populaCombo() {
+    public void populaCombo() {
         PreparedStatement stmt = null;
         Connection con = Conexao.getConnection();
         ResultSet rs = null;
@@ -199,18 +282,98 @@ public void populaCombo() {
         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnSairActionPerformed
 
+    private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
+
+        Aviso aviso = new Aviso();
+        AvisoDAO daoAviso = new AvisoDAO();
+        Predio p = new Predio();
+        Utilidades util = new Utilidades();
+
+        int codPredio = util.achaCodigoPredio((String) comboPredio.getSelectedItem());
+        p.setIdPredio(codPredio);
+
+        aviso.setDescricaoAviso(txtAvisos.getText());
+        aviso.setNomeSindico("Sindico");
+        aviso.setPredio(p);
+
+        try {
+            if (opSalvar.equals("salvar")) {
+                daoAviso.adicionarAviso(aviso);
+                JOptionPane.showMessageDialog(null, "Aviso enviado com sucesso.");
+            } else {
+                aviso.setIdAviso(Integer.valueOf(txtId.getText()));
+                daoAviso.updateAviso(aviso);
+                JOptionPane.showMessageDialog(null, "Aviso editado com sucesso.");
+                 lerTabela();
+            }
+            btnEnviar.setEnabled(false);
+            btnNovo.setEnabled(true);
+            txtAvisos.setEnabled(false);
+            btnEditar.setEnabled(false);
+            btnExcluir.setEnabled(false);
+            comboPredio.setEnabled(false);
+            btnNovo.requestFocus();
+            txtAvisos.setText("");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro de funcao");
+        }
+
+        lerTabela();
+
+    }//GEN-LAST:event_btnEnviarActionPerformed
+
+    private void jtAvisosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtAvisosMouseClicked
+        btnEditar.setEnabled(true);
+        btnExcluir.setEnabled(true);
+
+        txtId.setText(jtAvisos.getValueAt(jtAvisos.getSelectedRow(), 0).toString());
+        txtAvisos.setText(jtAvisos.getValueAt(jtAvisos.getSelectedRow(), 1).toString());
+
+        comboPredio.setEditable(true);
+        comboPredio.setSelectedItem(jtAvisos.getValueAt(jtAvisos.getSelectedRow(), 2).toString());
+        comboPredio.setEditable(false);
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_jtAvisosMouseClicked
+
+    private void comboPredioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboPredioMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboPredioMouseClicked
+
+    public void lerTabela() {
+
+        DefaultTableModel modelo = (DefaultTableModel) jtAvisos.getModel();
+        modelo.setNumRows(0);
+        Aviso aviso = new Aviso();
+        AvisoDAO daoAviso = new AvisoDAO();
+
+        for (Aviso a : daoAviso.readAviso(aviso)) {
+            modelo.addRow(new Object[]{
+                a.getIdAviso(),
+                a.getDescricaoAviso(),
+            a.getPredio().getNomePredio()});
+            ;
+
+        }
+
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEnviar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSair;
     private javax.swing.JComboBox<Object> comboPredio;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTable jtAvisos;
+    private javax.swing.JTextArea txtAvisos;
+    private javax.swing.JTextField txtId;
     // End of variables declaration//GEN-END:variables
 }

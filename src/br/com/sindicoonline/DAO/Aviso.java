@@ -1,18 +1,5 @@
-/*
-create table avisos(
-idAviso int auto_increment primary key not null,
-descricaoAviso varchar(50),
-idSindico int not null,
-idPredio int not null,
-foreign key (idSindico) references sindico(idSindico),
-foreign key(idPredio) references predio(idPredio));
- */
-package br.com.sindicoonline.DAO;
 
-/**
- *
- * @author klebe
- */
+package br.com.sindicoonline.DAO;
 public class Aviso {
 
     private int idAviso;
@@ -52,6 +39,7 @@ public class Aviso {
         this.predio = predio;
     }
 
+  
 
 
 }

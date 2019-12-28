@@ -1,5 +1,6 @@
 package br.com.sindicoonline.DAO;
 
+import br.com.sindicoonline.frm.frmPrincipal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -59,15 +60,19 @@ public class ReclamacaoDAO {
         }
     }
 
-
     public List<Reclamacao> readReclamacaoListaComNome(Reclamacao reclamacao, int morador) {
         PreparedStatement stmt = null;
         Connection con = Conexao.getConnection();
         ResultSet rs = null;
         List<Reclamacao> reclamacoes = new ArrayList<>();
+        
+               try {
+            if (morador == 1) {
+                stmt = con.prepareStatement("select * from reclamacao");
+            } else {
+                stmt = con.prepareStatement("select * from reclamacao where idMorador = " + morador);
+            }
 
-        try {
-            stmt = con.prepareStatement("select * from reclamacao where idMorador = " + morador);
             rs = stmt.executeQuery();
             while (rs.next()) {
 
@@ -84,8 +89,5 @@ public class ReclamacaoDAO {
         }
         return reclamacoes;
     }
-    
-    
-
 
 }

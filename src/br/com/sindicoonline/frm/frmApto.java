@@ -32,10 +32,10 @@ public class frmApto extends javax.swing.JInternalFrame {
         initComponents();
         lerTabela();
         try {
-        populaComboPredio();
-        populaELimpa();
-        }catch(Exception e){
-            
+            populaComboPredio();
+            populaELimpa();
+        } catch (Exception e) {
+
         }
 
     }
@@ -80,7 +80,6 @@ public class frmApto extends javax.swing.JInternalFrame {
         jPanel3 = new javax.swing.JPanel();
         btnEditar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
-        btnSair = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         btnNovo = new javax.swing.JButton();
@@ -98,7 +97,8 @@ public class frmApto extends javax.swing.JInternalFrame {
         setClosable(true);
         setTitle("Cadastro Apartamento");
 
-        btnEditar.setText("Editar Cadastro");
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/edit4545.png"))); // NOI18N
+        btnEditar.setToolTipText("Editar Cadastro");
         btnEditar.setEnabled(false);
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -106,7 +106,8 @@ public class frmApto extends javax.swing.JInternalFrame {
             }
         });
 
-        btnExcluir.setText("Excluir Cadastro");
+        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/delete4545.png"))); // NOI18N
+        btnExcluir.setToolTipText("Excluir Cadastro");
         btnExcluir.setEnabled(false);
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -114,27 +115,23 @@ public class frmApto extends javax.swing.JInternalFrame {
             }
         });
 
-        btnSair.setText("Sair");
-        btnSair.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSairActionPerformed(evt);
-            }
-        });
-
         jLabel1.setText("Numero:");
 
         jLabel4.setText("Codigo:");
 
-        btnNovo.setText("Novo Cadastro");
+        btnNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/add4545.png"))); // NOI18N
+        btnNovo.setToolTipText("Novo Cadastro");
         btnNovo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNovoActionPerformed(evt);
             }
         });
 
+        txtIdApto.setToolTipText("Codigo referente ao cadastro.");
         txtIdApto.setEnabled(false);
 
-        btnSalvar.setText("Salvar");
+        btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/salvar4545.png"))); // NOI18N
+        btnSalvar.setToolTipText("Salvar");
         btnSalvar.setEnabled(false);
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -142,6 +139,7 @@ public class frmApto extends javax.swing.JInternalFrame {
             }
         });
 
+        comboPredio.setToolTipText("Selecione o predio correspondente.");
         comboPredio.setEnabled(false);
         comboPredio.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -159,6 +157,7 @@ public class frmApto extends javax.swing.JInternalFrame {
             }
         });
 
+        comboBloco.setToolTipText("Selecione o bloco correspondente.");
         comboBloco.setEnabled(false);
         comboBloco.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -170,7 +169,8 @@ public class frmApto extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Bloco:");
 
-        btnCancelar.setText("Cancelar");
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/cancelar Original.png"))); // NOI18N
+        btnCancelar.setToolTipText("Cancelar");
         btnCancelar.setEnabled(false);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -178,7 +178,13 @@ public class frmApto extends javax.swing.JInternalFrame {
             }
         });
 
+        txtNumeroApto.setToolTipText("Digite numeros.");
         txtNumeroApto.setEnabled(false);
+        txtNumeroApto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNumeroAptoKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -186,9 +192,9 @@ public class frmApto extends javax.swing.JInternalFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel2))
                         .addGap(18, 18, 18)
@@ -201,51 +207,55 @@ public class frmApto extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel1))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                 .addGap(13, 13, 13)
-                                .addComponent(jLabel3)))
+                                .addComponent(jLabel3))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(comboBloco, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNumeroApto, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txtNumeroApto, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboBloco, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnNovo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnExcluir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(94, Short.MAX_VALUE))))
+                        .addGap(64, 64, 64)
+                        .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNovo)
-                    .addComponent(btnEditar)
-                    .addComponent(btnExcluir)
-                    .addComponent(btnSair))
-                .addGap(32, 32, 32)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtIdApto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtNumeroApto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSalvar)
-                    .addComponent(comboPredio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboBloco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(btnCancelar))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtIdApto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(txtNumeroApto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(comboBloco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)
+                            .addComponent(comboPredio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -296,14 +306,14 @@ public class frmApto extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -366,16 +376,12 @@ public class frmApto extends javax.swing.JInternalFrame {
         jtApto.setEnabled(true);
     }//GEN-LAST:event_btnExcluirActionPerformed
 
-    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
-        this.dispose();        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSairActionPerformed
-
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
 
         // TODO add your handling code here:
         txtNumeroApto.setEnabled(true);
-       txtNumeroApto.setText("");
-       txtNumeroApto.setEnabled(true);
+        txtNumeroApto.setText("");
+        txtNumeroApto.setEnabled(true);
         btnSalvar.setEnabled(true);
         btnNovo.setEnabled(false);
         btnEditar.setEnabled(false);
@@ -386,7 +392,7 @@ public class frmApto extends javax.swing.JInternalFrame {
         btnCancelar.setEnabled(true);
         opSAlvarEditar = "salvar";
         jtApto.setEnabled(false);
-
+        txtNumeroApto.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -398,9 +404,9 @@ public class frmApto extends javax.swing.JInternalFrame {
 
         int codPredio = util.achaCodigoPredio((String) comboPredio.getSelectedItem());
         int codBloco = util.achaCodigoBloco((String) comboBloco.getSelectedItem(), codPredio);
-     
+
         b.setIdBloco(codBloco);
-        
+
         apto.setNumeroApto(Integer.valueOf(txtNumeroApto.getText()));
         apto.setBloco(b);
 
@@ -476,12 +482,26 @@ public class frmApto extends javax.swing.JInternalFrame {
     private void jtAptoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtAptoMouseClicked
         txtIdApto.setText(jtApto.getValueAt(jtApto.getSelectedRow(), 0).toString());
         txtNumeroApto.setText(jtApto.getValueAt(jtApto.getSelectedRow(), 1).toString());
+        comboBloco.setEditable(true);
+        comboBloco.setEnabled(true);
+        comboPredio.setEditable(true);
+        comboPredio.setEnabled(true);
         comboBloco.setSelectedItem(jtApto.getValueAt(jtApto.getSelectedRow(), 2).toString());
         comboPredio.setSelectedItem(jtApto.getValueAt(jtApto.getSelectedRow(), 3).toString());
+        comboBloco.setEditable(false);
+        comboBloco.setEnabled(false);
+        comboPredio.setEditable(false);
+        comboPredio.setEnabled(false);
 
         btnEditar.setEnabled(true);
         btnExcluir.setEnabled(true);
     }//GEN-LAST:event_jtAptoMouseClicked
+
+    private void txtNumeroAptoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumeroAptoKeyPressed
+       if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            comboPredio.requestFocus();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNumeroAptoKeyPressed
 
     public void populaComboPredio() {
         PreparedStatement stmt = null;
@@ -521,7 +541,6 @@ public class frmApto extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
-    private javax.swing.JButton btnSair;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<Object> comboBloco;
     private javax.swing.JComboBox<Object> comboPredio;

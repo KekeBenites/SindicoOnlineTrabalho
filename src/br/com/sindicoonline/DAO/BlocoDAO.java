@@ -10,18 +10,6 @@ import java.util.List;
 
 public class BlocoDAO {
 
-//private static BlocoDAO instance;
-//
-//    static {
-//        instance = new BlocoDAO();
-//    }
-//
-//    public BlocoDAO() {
-//    }
-//
-//    public static BlocoDAO getInstance() {
-//        return instance;
-//    }
     public void adicionarBloco(Bloco bloco) {
 
         Connection conn = Conexao.getConnection();

@@ -58,7 +58,8 @@ public class frmLogin extends javax.swing.JFrame {
 
         jLabel3.setText("Senha:");
 
-        txtUsuario.setText("kleber");
+        txtUsuario.setText("sindico");
+        txtUsuario.setToolTipText("Digite um usuário valido.");
         txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtUsuarioKeyPressed(evt);
@@ -66,6 +67,7 @@ public class frmLogin extends javax.swing.JFrame {
         });
 
         txtSenha.setText("123");
+        txtSenha.setToolTipText("Digite sua senha correspondente.");
         txtSenha.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtSenhaKeyPressed(evt);
@@ -73,6 +75,7 @@ public class frmLogin extends javax.swing.JFrame {
         });
 
         btnLogin.setText("Entrar");
+        btnLogin.setToolTipText("Acessar o sistema.");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
@@ -80,6 +83,7 @@ public class frmLogin extends javax.swing.JFrame {
         });
 
         btnSair.setText("Sair");
+        btnSair.setToolTipText("Finalizar o sistema.");
         btnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSairActionPerformed(evt);
@@ -174,7 +178,7 @@ public class frmLogin extends javax.swing.JFrame {
                 txtSenha.requestFocus();
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Usuario invalido.");
+            JOptionPane.showMessageDialog(null, "Usuario invalido." + ex);
             txtUsuario.requestFocus();
         }
 

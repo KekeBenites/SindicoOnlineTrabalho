@@ -1,18 +1,16 @@
-
 package br.com.sindicoonline.DAO;
 
 /**
-idApto int auto_increment primary key,
-numeroApto int not null,
-idBloco int not null,
+ * idApto int auto_increment primary key, numeroApto int not null, idBloco int
+ * not null,
  */
 public class Apto {
-    
-   private  int idApto;
-   private  int numeroApto;
-  private   Predio predio;
-   private  Bloco bloco;
-    
+
+    private int idApto;
+    private int numeroApto;
+    private Predio predio;
+    private Bloco bloco;
+
     public int getIdApto() {
         return idApto;
     }
@@ -45,10 +43,4 @@ public class Apto {
         this.bloco = bloco;
     }
 
-
-
-
-
-
-    
 }

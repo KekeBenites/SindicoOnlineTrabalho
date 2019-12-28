@@ -19,11 +19,14 @@ public class frmPrincipal extends javax.swing.JFrame {
     public frmPrincipal(String usuario) {
         initComponents();
 
-        frmAvisos avisos = new frmAvisos(lblUsuario.getText(),lblUsuario.getText());
-        painelPrincipal.add(avisos);
-        avisos.setVisible(true);
-
         lblUsuario.setText(usuario);
+        if (lblUsuario.getText().equals("sindico")) {
+
+        } else {
+            frmAvisos avisos = new frmAvisos();
+            painelPrincipal.add(avisos);
+            avisos.setVisible(true);
+        }
 
         Connection conn = Conexao.getConnection();
         Statement stmt;
@@ -31,7 +34,7 @@ public class frmPrincipal extends javax.swing.JFrame {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("select idMorador from morador where loginMorador = '" + lblUsuario.getText() + "'");
             rs.first();
-            lblIdMorador.setText(rs.getString("idmorador"));
+            lblIdMorador.setText(rs.getString("idMorador"));
 
         } catch (SQLException e) {
 
@@ -60,11 +63,11 @@ public class frmPrincipal extends javax.swing.JFrame {
         lblUsuario = new javax.swing.JLabel();
         lblIdMorador = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         btnPrincipal = new javax.swing.JLabel();
         btnAgenda = new javax.swing.JLabel();
         btnFatura = new javax.swing.JLabel();
         btnBoleto = new javax.swing.JLabel();
-        btnMensagem = new javax.swing.JLabel();
         btnQuadroAviso = new javax.swing.JLabel();
         btnReclamacao = new javax.swing.JLabel();
         btnduvidas = new javax.swing.JLabel();
@@ -89,7 +92,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        painelPrincipal.setBackground(new java.awt.Color(255, 255, 255));
+        painelPrincipal.setBackground(new java.awt.Color(255, 51, 102));
         painelPrincipal.setName(""); // NOI18N
         painelPrincipal.setOpaque(false);
 
@@ -99,6 +102,11 @@ public class frmPrincipal extends javax.swing.JFrame {
                 jButton1MousePressed(evt);
             }
         });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         lblUsuario.setText("jLabel1");
 
@@ -106,41 +114,46 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         jLabel1.setText("Usuario:");
 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/background.jpg"))); // NOI18N
+
         painelPrincipal.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         painelPrincipal.setLayer(lblUsuario, javax.swing.JLayeredPane.DEFAULT_LAYER);
         painelPrincipal.setLayer(lblIdMorador, javax.swing.JLayeredPane.DEFAULT_LAYER);
         painelPrincipal.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        painelPrincipal.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout painelPrincipalLayout = new javax.swing.GroupLayout(painelPrincipal);
         painelPrincipal.setLayout(painelPrincipalLayout);
         painelPrincipalLayout.setHorizontalGroup(
             painelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelPrincipalLayout.createSequentialGroup()
-                .addGroup(painelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(painelPrincipalLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblIdMorador, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblUsuario)
-                        .addGap(0, 771, Short.MAX_VALUE))
-                    .addGroup(painelPrincipalLayout.createSequentialGroup()
-                        .addContainerGap(855, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(lblIdMorador, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblUsuario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 778, Short.MAX_VALUE)
+                .addComponent(jButton1)
                 .addContainerGap())
+            .addGroup(painelPrincipalLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         painelPrincipalLayout.setVerticalGroup(
             painelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelPrincipalLayout.createSequentialGroup()
-                .addContainerGap(448, Short.MAX_VALUE)
-                .addGroup(painelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblIdMorador)
-                    .addComponent(lblUsuario)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addGap(18, 18, 18))
+            .addGroup(painelPrincipalLayout.createSequentialGroup()
+                .addContainerGap(59, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                .addGroup(painelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelPrincipalLayout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(lblIdMorador)
+                        .addComponent(lblUsuario))))
         );
 
         btnPrincipal.setBackground(new java.awt.Color(255, 255, 255));
@@ -173,6 +186,9 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnAgenda.setOpaque(true);
         btnAgenda.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnAgenda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAgendaMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnAgendaMouseEntered(evt);
             }
@@ -190,7 +206,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnFatura.setBackground(new java.awt.Color(255, 255, 255));
         btnFatura.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnFatura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/icons8-fatura-64.png"))); // NOI18N
-        btnFatura.setText("Fatura");
+        btnFatura.setText("Extrato");
         btnFatura.setToolTipText("Pegue o relatório de gastos do seu predio.");
         btnFatura.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFatura.setOpaque(true);
@@ -233,29 +249,6 @@ public class frmPrincipal extends javax.swing.JFrame {
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 btnBoletoMouseReleased(evt);
-            }
-        });
-
-        btnMensagem.setBackground(new java.awt.Color(255, 255, 255));
-        btnMensagem.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnMensagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/icons8-calendário-64 (1).png"))); // NOI18N
-        btnMensagem.setText("Mensagem");
-        btnMensagem.setToolTipText("Mensagem");
-        btnMensagem.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnMensagem.setOpaque(true);
-        btnMensagem.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnMensagem.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnMensagemMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnMensagemMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnMensagemMousePressed(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                btnMensagemMouseReleased(evt);
             }
         });
 
@@ -314,12 +307,15 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnduvidas.setBackground(new java.awt.Color(255, 255, 255));
         btnduvidas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnduvidas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/sindicoonline/Icones/icons8-pergunte-64.png"))); // NOI18N
-        btnduvidas.setText("Duvidas");
+        btnduvidas.setText("Ajuda");
         btnduvidas.setToolTipText("Tire suas duvidas");
         btnduvidas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnduvidas.setOpaque(true);
         btnduvidas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnduvidas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnduvidasMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnduvidasMouseEntered(evt);
             }
@@ -367,23 +363,21 @@ public class frmPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnPrincipal)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addComponent(btnAgenda, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addComponent(btnFatura)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addComponent(btnBoleto)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addComponent(btnMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addComponent(btnQuadroAviso)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(btnReclamacao, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addComponent(btnduvidas)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(btnSindico)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
             .addComponent(painelPrincipal)
         );
         jPanel2Layout.setVerticalGroup(
@@ -395,7 +389,6 @@ public class frmPrincipal extends javax.swing.JFrame {
                     .addComponent(btnAgenda)
                     .addComponent(btnFatura)
                     .addComponent(btnBoleto)
-                    .addComponent(btnMensagem)
                     .addComponent(btnQuadroAviso)
                     .addComponent(btnReclamacao)
                     .addComponent(btnduvidas)
@@ -414,7 +407,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -502,23 +495,6 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnBoleto.setBackground(new Color(normal, normal, normal));
     }//GEN-LAST:event_btnBoletoMouseReleased
 
-    private void btnMensagemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMensagemMouseEntered
-        // TODO add your handling code here:
-        btnMensagem.setBackground(new Color(r, g, b));
-    }//GEN-LAST:event_btnMensagemMouseEntered
-
-    private void btnMensagemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMensagemMouseExited
-        btnMensagem.setBackground(new Color(normal, normal, normal));
-    }//GEN-LAST:event_btnMensagemMouseExited
-
-    private void btnMensagemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMensagemMousePressed
-        btnMensagem.setBackground(new Color(rp, gp, bp));
-    }//GEN-LAST:event_btnMensagemMousePressed
-
-    private void btnMensagemMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMensagemMouseReleased
-        btnMensagem.setBackground(new Color(normal, normal, normal));
-    }//GEN-LAST:event_btnMensagemMouseReleased
-
     private void btnQuadroAvisoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQuadroAvisoMouseEntered
         // TODO add your handling code here:
         btnQuadroAviso.setBackground(new Color(r, g, b));
@@ -554,7 +530,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReclamacaoMouseReleased
 
     private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
-        this.dispose();
+        
     }//GEN-LAST:event_jButton1MousePressed
 
     private void btnduvidasMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnduvidasMouseEntered
@@ -602,21 +578,39 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         frmSindico areaSindico = new frmSindico();
         painelPrincipal.add(areaSindico);
+        areaSindico.setLocation(1, 1);
         areaSindico.setVisible(true);
-        int r = 10;
-        int t = 10;
 
 //        System.out.println(painelPrincipal.getSize());
-        areaSindico.setLocation(painelPrincipal.getHeight() - areaSindico.getHeight(), 0);
+      
 
 
     }//GEN-LAST:event_btnSindicoMouseClicked
 
     private void btnQuadroAvisoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQuadroAvisoMouseClicked
-        frmAvisos avisos = new frmAvisos(lblUsuario.getText(),lblUsuario.getText());
+        frmAvisos avisos = new frmAvisos();
         painelPrincipal.add(avisos);
         avisos.setVisible(true);
     }//GEN-LAST:event_btnQuadroAvisoMouseClicked
+
+    private void btnduvidasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnduvidasMouseClicked
+        frmAjuda avisos = new frmAjuda();
+        painelPrincipal.add(avisos);
+        avisos.setVisible(true);
+    }//GEN-LAST:event_btnduvidasMouseClicked
+
+    private void btnAgendaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgendaMouseClicked
+                frmAgenda agenda = new frmAgenda();
+        painelPrincipal.add(agenda);
+        agenda.setVisible(true);
+    }//GEN-LAST:event_btnAgendaMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       this.dispose();
+       
+       frmLogin login = new frmLogin();
+       login.show();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
 
@@ -631,7 +625,6 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel btnAgenda;
     private javax.swing.JLabel btnBoleto;
     private javax.swing.JLabel btnFatura;
-    private javax.swing.JLabel btnMensagem;
     private javax.swing.JLabel btnPrincipal;
     private javax.swing.JLabel btnQuadroAviso;
     private javax.swing.JLabel btnReclamacao;
@@ -639,10 +632,11 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel btnduvidas;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel lblIdMorador;
-    private javax.swing.JLabel lblUsuario;
+    public static javax.swing.JLabel lblIdMorador;
+    public static javax.swing.JLabel lblUsuario;
     public static javax.swing.JDesktopPane painelPrincipal;
     // End of variables declaration//GEN-END:variables
 }

@@ -122,7 +122,8 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtUsuario">
           <Properties>
-            <Property name="text" type="java.lang.String" value="kleber"/>
+            <Property name="text" type="java.lang.String" value="sindico"/>
+            <Property name="toolTipText" type="java.lang.String" value="Digite um usu&#xe1;rio valido."/>
           </Properties>
           <Events>
             <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtUsuarioKeyPressed"/>
@@ -134,6 +135,7 @@
         <Component class="javax.swing.JPasswordField" name="txtSenha">
           <Properties>
             <Property name="text" type="java.lang.String" value="123"/>
+            <Property name="toolTipText" type="java.lang.String" value="Digite sua senha correspondente."/>
           </Properties>
           <Events>
             <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtSenhaKeyPressed"/>
@@ -142,6 +144,7 @@
         <Component class="javax.swing.JButton" name="btnLogin">
           <Properties>
             <Property name="text" type="java.lang.String" value="Entrar"/>
+            <Property name="toolTipText" type="java.lang.String" value="Acessar o sistema."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLoginActionPerformed"/>
@@ -150,6 +153,7 @@
         <Component class="javax.swing.JButton" name="btnSair">
           <Properties>
             <Property name="text" type="java.lang.String" value="Sair"/>
+            <Property name="toolTipText" type="java.lang.String" value="Finalizar o sistema."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSairActionPerformed"/>
